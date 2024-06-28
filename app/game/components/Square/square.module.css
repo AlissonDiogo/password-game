@@ -1,0 +1,13 @@
+.inputSquad {
+    color: black;
+    width: 120px;
+    height: 120px;
+    font-size: 80px;
+    text-indent: 50%;
+    transition: text-indent 0.2s;
+    border-radius: 10%;
+}
+
+.textIndent27 {
+    text-indent: 27%;
+}

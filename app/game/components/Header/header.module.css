@@ -1,0 +1,18 @@
+.generalContainer {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.leftContainer,
+.rightContainer {
+    font-size: 20px;
+}
+
+.middleContainer {
+    font-size: 32px;
+}
+
+/* .rightContainer {
+    font-size: 18px;
+} */
