@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useState } from "react";
+import { useDisclosure } from "@nextui-org/modal";
 
 interface contextValues {
   values: valuesType;
@@ -15,6 +16,7 @@ type valuesType = {
   round: number;
   answers: String[];
   currentAnswer: String[];
+  isOpenModalSuccess: boolean;
 };
 
 type functionsType = {
@@ -28,6 +30,8 @@ type functionsType = {
   onConfirmGameRow: Function;
   getIsCorrectValue: Function;
   getExistButNotCorrect: Function;
+  onOpenModalSuccess: Function;
+  onOpenChangeModalSuccess: Function;
 };
 
 export const GameContext = createContext<contextValues>({} as contextValues);
@@ -45,6 +49,8 @@ export const GameContextProvider = ({
   const [answers, setAnswers] = useState<String[]>([]);
   const [currentAnswer, setCurrentAnswer] = useState<string[]>([]);
 
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
   const getSquareValue = (squareNumber: number) => {};
 
   const setSquareValue = (squareNumber: number, newValue: string) => {
@@ -59,7 +65,8 @@ export const GameContextProvider = ({
       answersCopy.push(currentAnswer.join(""));
       setAnswers(answersCopy);
       setCurrentRow(currentRow + 1);
-      setCurrentAnswer([]); 
+      setCurrentAnswer([]);
+      onOpen()
     }
   };
 
@@ -110,6 +117,7 @@ export const GameContextProvider = ({
           round,
           answers,
           currentAnswer,
+          isOpenModalSuccess: isOpen,
         },
         functions: {
           setCurrentRow,
@@ -122,6 +130,8 @@ export const GameContextProvider = ({
           onConfirmGameRow,
           getIsCorrectValue,
           getExistButNotCorrect,
+          onOpenModalSuccess: onOpen,
+          onOpenChangeModalSuccess: onOpenChange,
         },
       }}
     >

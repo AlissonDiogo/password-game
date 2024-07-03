@@ -1,9 +1,13 @@
 .firstContainer {
     display: flex;
     justify-content: center;
-    margin-top: 3%;
+    padding-top: 3%;
 }
 
 .firstContainer>div {
     width: 80%;
+}
+
+.modalContent{
+    color: black;
 }
