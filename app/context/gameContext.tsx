@@ -62,8 +62,7 @@ export const GameContextProvider = ({
     for (let i = 0; i < word.length; i++) {
       const inputRef = createRef();
       refMap.set(i, inputRef);
-    }
-    console.log(refMap)
+    } 
     setRefSquareList(refMap);
   }, [word]);
 

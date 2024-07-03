@@ -69,3 +69,11 @@ body {
   margin-top: 10px;
   width: 125px;
 }
+
+.float-button{
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin-right: 40px;
+  margin-bottom: 40px;
+}
