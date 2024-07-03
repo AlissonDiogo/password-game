@@ -2,12 +2,12 @@
 
 import { createContext, useState } from "react";
 
-interface contextValues {
-  values: valuesType;
-  functions: functionsType;
+interface ContextValues {
+  values: ValuesType;
+  functions: FunctionsType;
 }
 
-type valuesType = {
+type ValuesType = {
   currentRow: number;
   word: String;
   participantName: String;
@@ -17,7 +17,7 @@ type valuesType = {
   currentAnswer: String[];
 };
 
-type functionsType = {
+type FunctionsType = {
   setCurrentRow: Function;
   setWord: Function;
   setParticipantName: Function;
@@ -30,7 +30,7 @@ type functionsType = {
   getExistButNotCorrect: Function;
 };
 
-export const GameContext = createContext<contextValues>({} as contextValues);
+export const GameContext = createContext<ContextValues>({} as ContextValues);
 
 export const GameContextProvider = ({
   children,
