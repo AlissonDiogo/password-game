@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import styles from "./ranking.module.css";
 import {
@@ -35,10 +36,12 @@ const Ranking: React.FC = () => {
       const valueSplited = item.split(";");
       const participantName = valueSplited[0];
       const points = valueSplited[1];
+      const seconds = valueSplited[2];
       itens.push(
         <TableRow key={index}>
           <TableCell className={styles.tableCell}>{participantName}</TableCell>
           <TableCell className={styles.tableCell}>{points}</TableCell>
+          <TableCell className={styles.tableCell}>{seconds}</TableCell>
         </TableRow>
       );
     });
@@ -47,11 +50,13 @@ const Ranking: React.FC = () => {
 
   return (
     <div className={styles.rankingContainer}>
-      <div>
-        <Table aria-label="Example static collection table">
+      <h1 style={{ fontSize: '2em' }}>Ranking</h1>
+      <div style={{ marginTop: "20px" }}>
+        <Table aria-label="Ranking Password Game">
           <TableHeader>
             <TableColumn>PARTICIPANTE</TableColumn>
             <TableColumn>PONTUAÇÃO</TableColumn>
+            <TableColumn>TEMPO (s)</TableColumn>
           </TableHeader>
           <TableBody>{getTableRow()}</TableBody>
         </Table>

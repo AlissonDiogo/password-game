@@ -17,13 +17,17 @@ import { GameContext } from "../context/gameContext";
 
 import styles from "./game.module.css";
 
+let timeout: NodeJS.Timeout | null = null;
+
 export default function Game() {
   const router = useRouter();
   const {
-    values,
+    values: {points, isOpenModalSuccess, word},
     functions: { onOpenChangeModalSuccess, resetGame, nextWord },
   } = useContext(GameContext);
+
   const [participantName, setParticipantName] = useState<string>("");
+  const [seconds, setSeconds] = useState(0);
 
   useEffect(() => {
     if(document){
@@ -34,6 +38,13 @@ export default function Game() {
     }
   }, [document]);
 
+
+  useEffect(() => {
+    timeout = setTimeout(() => {
+      setSeconds(prev => prev + 1);
+    }, 1000);
+  }, [timeout]);
+
   const setParticipantInTxtFile = async () => {
     try {
       const response = await fetch("/ranking/api", {
@@ -41,7 +52,7 @@ export default function Game() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ participantName: "test", points: 100 }),
+        body: JSON.stringify({ participantName, points, seconds }),
       });
 
       if (!response.ok) {
@@ -52,13 +63,30 @@ export default function Game() {
     }
   };
 
+  const formatTime = (totalSeconds: number): string => {
+    const minutes = Math.floor(totalSeconds / 60);
+    const remainingSeconds = totalSeconds % 60;
+    return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+  };
+
+  const logoutGame = (): void => {
+    if(timeout) clearTimeout(timeout);
+    setParticipantInTxtFile();
+    resetGame();
+    router.back();
+  }
+
   return (
     <div className={styles.firstContainer}>
       <div>
-        <Header participantName={participantName} />
+        <Header 
+          participantName={participantName} 
+          timeFormatted={formatTime(seconds)} 
+          logout={logoutGame}
+        />
         <GameBoard />
         <Modal
-          isOpen={values.isOpenModalSuccess}
+          isOpen={isOpenModalSuccess}
           onOpenChange={() => onOpenChangeModalSuccess()}
           isDismissable={false}
           isKeyboardDismissDisabled={true}
@@ -70,7 +98,7 @@ export default function Game() {
                   Certa resposta
                 </ModalHeader>
                 <ModalBody>
-                  <p>Respota correta! A palavra acertada foi {values.word}</p>
+                  <p>Respota correta! A palavra acertada foi {word}</p>
                   <p>
                     Se quiser continuar jogando, clique no botão continuar
                     abaixo.

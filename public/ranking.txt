@@ -1,2 +1,3 @@
-Alisson;300
-Pedro;200 
+Pedro;100;79
+Pedro;100;26
+José;100;468

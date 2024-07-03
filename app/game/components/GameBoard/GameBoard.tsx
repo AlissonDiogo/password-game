@@ -9,7 +9,7 @@ const GameBoard: React.FC = () => {
 
   const mountGameBoard = () => {
     const rows = [];
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 6; i++) {
       rows.push(
         <GameRow key={i} wordLength={word.length} currentRow={currentRow} rowNumber={i} />
       );
