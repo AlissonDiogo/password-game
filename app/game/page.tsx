@@ -26,9 +26,11 @@ export default function Game() {
   const [participantName, setParticipantName] = useState<string>("");
 
   useEffect(() => {
-    const cookie = document.cookie;
-    if (cookie && cookie?.startsWith("user")) {
-      setParticipantName(cookie.split("=")[1]);
+    if(document){
+      const cookie = document.cookie;
+      if (cookie && cookie?.startsWith("user")) {
+        setParticipantName(cookie.split("=")[1]);
+      }
     }
   }, [document]);
 
