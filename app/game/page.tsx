@@ -1,6 +1,7 @@
 "use client";
-import { useContext, useState } from "react";
-import styles from "./game.module.css";
+import { useContext, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
 import Header from "./components/Header/Header";
 import GameBoard from "./components/GameBoard/GameBoard";
 import {
@@ -11,21 +12,32 @@ import {
   ModalFooter,
 } from "@nextui-org/modal";
 import { Button } from "@nextui-org/button";
+
 import { GameContext } from "../context/gameContext";
-import { useRouter } from "next/navigation";
+
+import styles from "./game.module.css";
+
 
 export default function Game() {
-  const { values, functions } = useContext(GameContext);
   const router = useRouter();
+  const { values, functions: { onOpenChangeModalSuccess, resetGame, nextWord } } = useContext(GameContext);
+  const [participantName, setParticipantName] = useState<string>("");
+
+  useEffect(() => {
+    const cookie = document.cookie;
+    if (cookie && cookie?.startsWith("user")) {
+      setParticipantName(cookie.split("=")[1]);
+    }
+  }, [document])
 
   return (
     <div className={styles.firstContainer}>
       <div>
-        <Header />
+        <Header participantName={participantName} />
         <GameBoard />
         <Modal
           isOpen={values.isOpenModalSuccess}
-          onOpenChange={() => functions.onOpenChangeModalSuccess()}
+          onOpenChange={() => onOpenChangeModalSuccess()}
           isDismissable={false}
           isKeyboardDismissDisabled={true}
         >
@@ -48,13 +60,16 @@ export default function Game() {
                     variant="light"
                     onPress={() => {
                       onClose();
-                      functions.resetGame()
+                      resetGame()
                       router.push("/");
                     }}
                   >
                     Cancelar
                   </Button>
-                  <Button color="primary" onPress={onClose}>
+                  <Button color="primary" onPress={() => {
+                    nextWord();
+                    onClose();
+                  }}>
                     Continuar
                   </Button>
                 </ModalFooter>

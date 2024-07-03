@@ -1,18 +1,15 @@
 'use client'
-
+import React, { useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import React, { useContext, useRef } from 'react';
-import { GameContext } from './context/gameContext';
 
 export default function RootPage() {
-  const {functions: { setParticipantName }} = useContext(GameContext);
   const router = useRouter();
   const nameRef = useRef<HTMLInputElement>({} as HTMLInputElement);
 
   const handleEnter = (): void => {
     const name = nameRef?.current.value;
     if(name){
-      setParticipantName(name);
+      document.cookie = `user=${name}`;
       router.push("/game");
     }
   }
@@ -25,8 +22,8 @@ export default function RootPage() {
         </h1>
         <div className='text-container'>
           <p className='description'>
-            É um jogo de palavras onde jogadores tentam adivinhar uma palavra secreta sem dica alguma. O usuário tem 6 chances e a
-            cada chance utilizada é marcado as letras corretas e letras em posições incorretas.
+            É um jogo de palavras onde os jogadores tentam adivinhar uma palavra secreta sem nenhuma dica. 
+            O usuário tem 5 chances, e a cada tentativa são marcadas as letras corretas e as letras em posições incorretas.
           </p>
         </div>
       </div>

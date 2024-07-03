@@ -3,9 +3,13 @@ import React, { useContext } from "react";
 import styles from "./header.module.css";
 import { GameContext } from "@/app/context/gameContext";
 
-const Header = () => {
+type Props = {
+  participantName: string;
+}
+
+const Header = ({ participantName }: Props) => {
   const { values } = useContext(GameContext);
-  const { participantName, points, round } = values;
+  const { points, round } = values;
   return (
     <div className={styles.generalContainer}>
       <div className={styles.leftContainer}>
