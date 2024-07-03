@@ -1,0 +1,2 @@
+Alisson;300
+Pedro;200 

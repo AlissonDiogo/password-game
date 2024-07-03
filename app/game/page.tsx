@@ -17,10 +17,12 @@ import { GameContext } from "../context/gameContext";
 
 import styles from "./game.module.css";
 
-
 export default function Game() {
   const router = useRouter();
-  const { values, functions: { onOpenChangeModalSuccess, resetGame, nextWord } } = useContext(GameContext);
+  const {
+    values,
+    functions: { onOpenChangeModalSuccess, resetGame, nextWord },
+  } = useContext(GameContext);
   const [participantName, setParticipantName] = useState<string>("");
 
   useEffect(() => {
@@ -28,7 +30,25 @@ export default function Game() {
     if (cookie && cookie?.startsWith("user")) {
       setParticipantName(cookie.split("=")[1]);
     }
-  }, [document])
+  }, [document]);
+
+  const setParticipantInTxtFile = async () => {
+    try {
+      const response = await fetch("/ranking/api", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ participantName: "test", points: 100 }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao enviar os dados");
+      }
+    } catch (error) {
+      console.log({ error });
+    }
+  };
 
   return (
     <div className={styles.firstContainer}>
@@ -60,16 +80,20 @@ export default function Game() {
                     variant="light"
                     onPress={() => {
                       onClose();
-                      resetGame()
+                      setParticipantInTxtFile();
+                      resetGame();
                       router.push("/");
                     }}
                   >
                     Cancelar
                   </Button>
-                  <Button color="primary" onPress={() => {
-                    nextWord();
-                    onClose();
-                  }}>
+                  <Button
+                    color="primary"
+                    onPress={() => {
+                      nextWord();
+                      onClose();
+                    }}
+                  >
                     Continuar
                   </Button>
                 </ModalFooter>
