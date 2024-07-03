@@ -3,12 +3,12 @@
 import { createContext, useState } from "react";
 import { useDisclosure } from "@nextui-org/modal";
 
-interface contextValues {
-  values: valuesType;
-  functions: functionsType;
+interface ContextValues {
+  values: ValuesType;
+  functions: FunctionsType;
 }
 
-type valuesType = {
+type ValuesType = {
   currentRow: number;
   word: String;
   participantName: String;
@@ -19,7 +19,7 @@ type valuesType = {
   isOpenModalSuccess: boolean;
 };
 
-type functionsType = {
+type FunctionsType = {
   setCurrentRow: Function;
   setWord: Function;
   setParticipantName: Function;
@@ -34,7 +34,7 @@ type functionsType = {
   onOpenChangeModalSuccess: Function;
 };
 
-export const GameContext = createContext<contextValues>({} as contextValues);
+export const GameContext = createContext<ContextValues>({} as ContextValues);
 
 export const GameContextProvider = ({
   children,
