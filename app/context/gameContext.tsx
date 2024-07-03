@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, createRef, useEffect, useRef, useState } from "react";
+import { createContext, createRef, useEffect, useState } from "react";
 import { useDisclosure } from "@nextui-org/modal";
 
 import { words } from "@/db";
@@ -41,16 +41,21 @@ type FunctionsType = {
 
 export const GameContext = createContext<ContextValues>({} as ContextValues);
 
+const getNextWord = (): string => {
+  const randomIndex = Math.floor(Math.random() * 184);
+  return words[randomIndex].toUpperCase();
+}
+
 export const GameContextProvider = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
   const [currentRow, setCurrentRow] = useState(0);
-  const [word, setWord] = useState("VIKING");
+  const [word, setWord] = useState(getNextWord());
   const [points, setPoints] = useState(0);
   const [round, setRound] = useState(1);
-  const [answers, setAnswers] = useState<String[]>([]);
+  const [answers, setAnswers] = useState<string[]>([]);
   const [currentAnswer, setCurrentAnswer] = useState<string[]>([]);
   const [disableAll, setDisableAll] = useState(false);
   const [refSquareList, setRefSquareList] = useState<Map<number, any>>(); 
@@ -140,8 +145,7 @@ export const GameContextProvider = ({
   };
 
   const nextWord = (): void => {
-    const randomIndex = Math.floor(Math.random() * 184);
-    setWord(words[randomIndex].toUpperCase());
+    setWord(getNextWord());
     setAnswers([]);
     setCurrentAnswer([]);
     setCurrentRow(0);
