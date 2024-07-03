@@ -1,3 +1,4 @@
 Pedro;100;79
 Pedro;100;26
 José;100;468
+alisson;0;19

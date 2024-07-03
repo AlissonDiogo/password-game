@@ -10,6 +10,7 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  useDisclosure,
 } from "@nextui-org/modal";
 import { Button } from "@nextui-org/button";
 
@@ -17,20 +18,21 @@ import { GameContext } from "../context/gameContext";
 
 import styles from "./game.module.css";
 
-let timeout: NodeJS.Timeout | null = null;
+let timeout: NodeJS.Timeout | undefined;
 
 export default function Game() {
   const router = useRouter();
   const {
-    values: {points, isOpenModalSuccess, word},
+    values: { points, isOpenModalSuccess, word, currentRow },
     functions: { onOpenChangeModalSuccess, resetGame, nextWord },
   } = useContext(GameContext);
 
   const [participantName, setParticipantName] = useState<string>("");
   const [seconds, setSeconds] = useState(0);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   useEffect(() => {
-    if(document){
+    if (document) {
       const cookie = document.cookie;
       if (cookie && cookie?.startsWith("user")) {
         setParticipantName(cookie.split("=")[1]);
@@ -38,12 +40,18 @@ export default function Game() {
     }
   }, [document]);
 
+  useEffect(() => {
+    timeout = setInterval(() => {
+      setSeconds((prev) => prev + 1);
+    }, 1000);
+    return () => clearInterval(timeout);
+  }, []);
 
   useEffect(() => {
-    timeout = setTimeout(() => {
-      setSeconds(prev => prev + 1);
-    }, 1000);
-  }, [timeout]);
+    if (currentRow === 6) {
+      onOpen();
+    }
+  }, [currentRow]);
 
   const setParticipantInTxtFile = async () => {
     try {
@@ -66,22 +74,24 @@ export default function Game() {
   const formatTime = (totalSeconds: number): string => {
     const minutes = Math.floor(totalSeconds / 60);
     const remainingSeconds = totalSeconds % 60;
-    return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+    return `${String(minutes).padStart(2, "0")}:${String(
+      remainingSeconds
+    ).padStart(2, "0")}`;
   };
 
   const logoutGame = (): void => {
-    if(timeout) clearTimeout(timeout);
+    if (timeout) clearTimeout(timeout);
     setParticipantInTxtFile();
     resetGame();
     router.back();
-  }
+  };
 
   return (
     <div className={styles.firstContainer}>
       <div>
-        <Header 
-          participantName={participantName} 
-          timeFormatted={formatTime(seconds)} 
+        <Header
+          participantName={participantName}
+          timeFormatted={formatTime(seconds)}
           logout={logoutGame}
         />
         <GameBoard />
@@ -125,6 +135,45 @@ export default function Game() {
                     }}
                   >
                     Continuar
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
+
+        <Modal
+          isOpen={isOpen}
+          onOpenChange={() => onOpenChange()}
+          isDismissable={false}
+          isKeyboardDismissDisabled={true}
+          hideCloseButton
+        >
+          <ModalContent className={styles.modalContent}>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">
+                  Jogo encerrado!
+                </ModalHeader>
+                <ModalBody>
+                  <p>Você usou todas as tentativas</p>
+                  <p>
+                    Sua pontuação será salva e contabilizado no ranking. Jogue
+                    novamente!
+                  </p>
+                </ModalBody>
+                <ModalFooter>
+                  <Button
+                    color="danger"
+                    variant="light"
+                    onPress={() => {
+                      onClose();
+                      setParticipantInTxtFile();
+                      resetGame();
+                      router.push("/");
+                    }}
+                  >
+                    Finalizar jogo
                   </Button>
                 </ModalFooter>
               </>

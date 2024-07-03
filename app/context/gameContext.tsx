@@ -44,7 +44,7 @@ export const GameContext = createContext<ContextValues>({} as ContextValues);
 const getNextWord = (): string => {
   const randomIndex = Math.floor(Math.random() * 184);
   return words[randomIndex].toUpperCase();
-}
+};
 
 export const GameContextProvider = ({
   children,
@@ -88,8 +88,8 @@ export const GameContextProvider = ({
       const answersCopy = answers;
       answersCopy.push(currentAnswer.join(""));
       setAnswers(answersCopy);
-      setCurrentRow(currentRow + 1);
       setCurrentAnswer([]);
+      if (currentRow !== 6) setCurrentRow(currentRow + 1); 
     }
   };
 
