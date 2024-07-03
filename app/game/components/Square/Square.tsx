@@ -43,7 +43,7 @@ const Square: React.FC<Props> = ({ rowNumber, currentRow, squareNumber }) => {
         })}
         value={inputValue}
         onChange={onChangeValue}
-        disabled={rowNumber !== currentRow}
+        disabled={rowNumber !== currentRow || values.disableAll}
         onKeyDown={onPressEnter}
       />
     </div>

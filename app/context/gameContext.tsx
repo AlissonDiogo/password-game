@@ -17,6 +17,7 @@ type ValuesType = {
   answers: String[];
   currentAnswer: String[];
   isOpenModalSuccess: boolean;
+  disableAll: boolean;
 };
 
 type FunctionsType = {
@@ -32,6 +33,7 @@ type FunctionsType = {
   getExistButNotCorrect: Function;
   onOpenModalSuccess: Function;
   onOpenChangeModalSuccess: Function;
+  resetGame: Function;
 };
 
 export const GameContext = createContext<ContextValues>({} as ContextValues);
@@ -48,10 +50,9 @@ export const GameContextProvider = ({
   const [round, setRound] = useState(1);
   const [answers, setAnswers] = useState<String[]>([]);
   const [currentAnswer, setCurrentAnswer] = useState<string[]>([]);
+  const [disableAll, setDisableAll] = useState(false);
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
-  const getSquareValue = (squareNumber: number) => {};
 
   const setSquareValue = (squareNumber: number, newValue: string) => {
     const currentAnswerCopy = currentAnswer;
@@ -61,13 +62,22 @@ export const GameContextProvider = ({
 
   const onConfirmGameRow = () => {
     if (checkAllFieldsAreFill()) {
+      if (checkIfAnswerIsCorrect(currentAnswer)) {
+        console.log("entrous");
+        setDisableAll(true);
+        onOpen();
+        setPoints(points + 100)
+      }
       const answersCopy = answers;
       answersCopy.push(currentAnswer.join(""));
       setAnswers(answersCopy);
       setCurrentRow(currentRow + 1);
       setCurrentAnswer([]);
-      onOpen()
     }
+  };
+
+  const checkIfAnswerIsCorrect = (currentAnswer: string[]) => {
+    return currentAnswer.join("").toUpperCase() === word;
   };
 
   const getIsCorrectValue = (rowNumber: number, squareNumber: number) => {
@@ -106,6 +116,16 @@ export const GameContextProvider = ({
     return valid;
   };
 
+  const resetGame = () => {
+    setCurrentRow(0);
+    setAnswers([]);
+    setCurrentAnswer([]);
+    setDisableAll(false);
+    setParticipantName("");
+    setPoints(0);
+    setRound(1);
+  };
+
   return (
     <GameContext.Provider
       value={{
@@ -118,6 +138,7 @@ export const GameContextProvider = ({
           answers,
           currentAnswer,
           isOpenModalSuccess: isOpen,
+          disableAll,
         },
         functions: {
           setCurrentRow,
@@ -132,6 +153,7 @@ export const GameContextProvider = ({
           getExistButNotCorrect,
           onOpenModalSuccess: onOpen,
           onOpenChangeModalSuccess: onOpenChange,
+          resetGame,
         },
       }}
     >

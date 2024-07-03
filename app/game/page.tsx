@@ -48,6 +48,7 @@ export default function Game() {
                     variant="light"
                     onPress={() => {
                       onClose();
+                      functions.resetGame()
                       router.push("/");
                     }}
                   >
