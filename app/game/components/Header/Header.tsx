@@ -13,12 +13,13 @@ const Header = ({ participantName }: Props) => {
   return (
     <div className={styles.generalContainer}>
       <div className={styles.leftContainer}>
-        Participante: {participantName}
+        Participante: {participantName} <br />
+        <text style={{ color: '#00ff00' }}>Pontuação: {points}</text>
       </div>
       <div className={styles.middleContainer}>Rodada {round}</div>
       <div className={styles.rightContainer}>
         <div>Tempo: 10:00</div>
-        <div>Pontuação: {points}</div>
+        <button style={{ textDecoration: 'underline', color: '#ff0000' }}>Sair</button>
       </div>
     </div>
   );
