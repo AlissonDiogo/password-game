@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useEffect, useState } from "react";
+import { createContext, createRef, useEffect, useRef, useState } from "react";
 import { useDisclosure } from "@nextui-org/modal";
 
 import { words } from "@/db";
@@ -18,7 +18,8 @@ type ValuesType = {
   answers: String[];
   currentAnswer: String[];
   isOpenModalSuccess: boolean;
-  disableAll: boolean;
+  disableAll: boolean; 
+  refSquareList: Map<number, any> | undefined;
 };
 
 type FunctionsType = {
@@ -34,6 +35,7 @@ type FunctionsType = {
   onOpenModalSuccess: Function;
   onOpenChangeModalSuccess: Function;
   resetGame: Function;
+  setRefSquareList: Function;
   nextWord: () => void;
 };
 
@@ -51,8 +53,19 @@ export const GameContextProvider = ({
   const [answers, setAnswers] = useState<String[]>([]);
   const [currentAnswer, setCurrentAnswer] = useState<string[]>([]);
   const [disableAll, setDisableAll] = useState(false);
+  const [refSquareList, setRefSquareList] = useState<Map<number, any>>(); 
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  useEffect(() => {
+    const refMap = new Map();
+    for (let i = 0; i < word.length; i++) {
+      const inputRef = createRef();
+      refMap.set(i, inputRef);
+    }
+    console.log(refMap)
+    setRefSquareList(refMap);
+  }, [word]);
 
   const setSquareValue = (squareNumber: number, newValue: string) => {
     const currentAnswerCopy = currentAnswer;
@@ -148,6 +161,7 @@ export const GameContextProvider = ({
           currentAnswer,
           isOpenModalSuccess: isOpen,
           disableAll,
+          refSquareList,
         },
         functions: {
           setCurrentRow,
@@ -163,6 +177,7 @@ export const GameContextProvider = ({
           onOpenChangeModalSuccess: onOpenChange,
           resetGame,
           nextWord,
+          setRefSquareList,
         },
       }}
     >
