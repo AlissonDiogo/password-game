@@ -18,7 +18,7 @@ type ValuesType = {
   answers: String[];
   currentAnswer: String[];
   isOpenModalSuccess: boolean;
-  disableAll: boolean; 
+  disableAll: boolean;
   refSquareList: Map<number, any> | undefined;
 };
 
@@ -53,7 +53,7 @@ export const GameContextProvider = ({
   const [answers, setAnswers] = useState<String[]>([]);
   const [currentAnswer, setCurrentAnswer] = useState<string[]>([]);
   const [disableAll, setDisableAll] = useState(false);
-  const [refSquareList, setRefSquareList] = useState<Map<number, any>>(); 
+  const [refSquareList, setRefSquareList] = useState<Map<number, any>>();
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -62,8 +62,9 @@ export const GameContextProvider = ({
     for (let i = 0; i < word.length; i++) {
       const inputRef = createRef();
       refMap.set(i, inputRef);
-    } 
+    }
     setRefSquareList(refMap);
+    console.log({ word });
   }, [word]);
 
   const setSquareValue = (squareNumber: number, newValue: string) => {

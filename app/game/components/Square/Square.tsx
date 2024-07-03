@@ -21,7 +21,7 @@ const Square: React.FC<Props> = ({ rowNumber, currentRow, squareNumber }) => {
 
   useEffect(() => {
     refSquareList?.get(0).current.focus();
-  }, [currentRow])
+  }, [currentRow]);
 
   const onChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length <= 1) {
