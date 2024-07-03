@@ -21,12 +21,12 @@ export default function RootPage() {
     <div className='home'>
       <div className='left'>
         <h1 className='title'>
-          The Password Game
+          Password Game
         </h1>
         <div className='text-container'>
           <p className='description'>
-            É um jogo de palavras onde jogadores tentam adivinhar uma palavra secreta com base em dicas fornecidas por outro jogador. A diversão está em criar
-            pistas que ajudem os outros a descobrir a palavra sem torná-la muito óbvia.
+            É um jogo de palavras onde jogadores tentam adivinhar uma palavra secreta sem dica alguma. O usuário tem 6 chances e a
+            cada chance utilizada é marcado as letras corretas e letras em posições incorretas.
           </p>
         </div>
       </div>
