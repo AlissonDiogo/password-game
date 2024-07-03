@@ -12,7 +12,7 @@ const GameRow: React.FC<Props> = ({ wordLength, currentRow, rowNumber }) => {
   const mountSquareRow = () => {
     const row = [];
     for (let i = 0; i < wordLength; i++) {
-      row.push(<Square currentRow={currentRow} rowNumber={rowNumber} />);
+      row.push(<Square key={i} currentRow={currentRow} rowNumber={rowNumber} squareNumber={i} />);
     }
     return row;
   };
