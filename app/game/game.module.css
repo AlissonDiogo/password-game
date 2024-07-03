@@ -2,9 +2,10 @@
     display: flex;
     justify-content: center;
     padding-top: 3%;
+    min-height: 100vh;
 }
 
-.firstContainer>div {
+.firstContainer > div {
     width: 80%;
 }
 
