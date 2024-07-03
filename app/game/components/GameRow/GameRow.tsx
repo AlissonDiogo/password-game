@@ -10,11 +10,11 @@ type Props = {
 
 const GameRow: React.FC<Props> = ({ wordLength, currentRow, rowNumber }) => {
   const mountSquareRow = () => {
-    const row = [];
+    const squares = [];
     for (let i = 0; i < wordLength; i++) {
-      row.push(<Square key={i} currentRow={currentRow} rowNumber={rowNumber} squareNumber={i} />);
+      squares.push(<Square key={i} currentRow={currentRow} rowNumber={rowNumber} squareNumber={i} />);
     }
-    return row;
+    return squares;
   };
 
   return <div className={styles.gameRowContainer}>{mountSquareRow()}</div>;

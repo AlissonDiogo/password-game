@@ -22,6 +22,7 @@ const Square: React.FC<Props> = ({ rowNumber, currentRow, squareNumber }) => {
   };
 
   const onPressEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    console.log({inputValue})
     if (e.key === "Enter") {
       functions.onConfirmGameRow();
     }

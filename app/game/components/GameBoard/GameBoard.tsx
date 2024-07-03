@@ -5,17 +5,16 @@ import GameRow from "../GameRow/GameRow";
 import { GameContext } from "@/app/context/gameContext";
 
 const GameBoard: React.FC = () => {
-  const { values } = useContext(GameContext);
-  const { currentRow } = values; 
+  const { values: {word , currentRow} } = useContext(GameContext);
 
   const mountGameBoard = () => {
-    const row = [];
+    const rows = [];
     for (let i = 0; i < 5; i++) {
-      row.push(
-        <GameRow wordLength={6} currentRow={currentRow} rowNumber={i} />
+      rows.push(
+        <GameRow key={i} wordLength={word.length} currentRow={currentRow} rowNumber={i} />
       );
     }
-    return row;
+    return rows;
   };
 
   return <div>{mountGameBoard()}</div>;

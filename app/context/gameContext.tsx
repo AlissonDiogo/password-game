@@ -1,7 +1,9 @@
 "use client";
 
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { useDisclosure } from "@nextui-org/modal";
+
+import { words } from '@/db'
 
 interface ContextValues {
   values: ValuesType;
@@ -11,7 +13,6 @@ interface ContextValues {
 type ValuesType = {
   currentRow: number;
   word: String;
-  participantName: String;
   points: number;
   round: number;
   answers: String[];
@@ -23,7 +24,6 @@ type ValuesType = {
 type FunctionsType = {
   setCurrentRow: Function;
   setWord: Function;
-  setParticipantName: Function;
   setPoints: Function;
   setRound: Function;
   setAnswers: Function;
@@ -34,6 +34,7 @@ type FunctionsType = {
   onOpenModalSuccess: Function;
   onOpenChangeModalSuccess: Function;
   resetGame: Function;
+  nextWord: () => void;
 };
 
 export const GameContext = createContext<ContextValues>({} as ContextValues);
@@ -45,7 +46,6 @@ export const GameContextProvider = ({
 }>) => {
   const [currentRow, setCurrentRow] = useState(0);
   const [word, setWord] = useState("VIKING");
-  const [participantName, setParticipantName] = useState("Visitor");
   const [points, setPoints] = useState(0);
   const [round, setRound] = useState(1);
   const [answers, setAnswers] = useState<String[]>([]);
@@ -53,6 +53,12 @@ export const GameContextProvider = ({
   const [disableAll, setDisableAll] = useState(false);
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  useEffect(() => {
+    if(currentAnswer){
+      console.log(currentAnswer)
+    }
+  }, [])
 
   const setSquareValue = (squareNumber: number, newValue: string) => {
     const currentAnswerCopy = currentAnswer;
@@ -63,7 +69,6 @@ export const GameContextProvider = ({
   const onConfirmGameRow = () => {
     if (checkAllFieldsAreFill()) {
       if (checkIfAnswerIsCorrect(currentAnswer)) {
-        console.log("entrous");
         setDisableAll(true);
         onOpen();
         setPoints(points + 100)
@@ -77,6 +82,7 @@ export const GameContextProvider = ({
   };
 
   const checkIfAnswerIsCorrect = (currentAnswer: string[]) => {
+    console.log({currentAnswer, word});
     return currentAnswer.join("").toUpperCase() === word;
   };
 
@@ -117,14 +123,26 @@ export const GameContextProvider = ({
   };
 
   const resetGame = () => {
+    document.cookie = "user=; expires=Thu, 01 Jan 2000 00:00:00 UTC; path=/;";    
+    
     setCurrentRow(0);
     setAnswers([]);
     setCurrentAnswer([]);
     setDisableAll(false);
-    setParticipantName("");
     setPoints(0);
     setRound(1);
   };
+
+  const nextWord = (): void =>  {
+    const randomIndex = Math.floor(Math.random() * 184);
+    console.log(words[randomIndex])
+    setWord(words[randomIndex]);
+    setAnswers([]);
+    setCurrentAnswer([]);
+    setCurrentRow(0);
+    setRound(prev => prev + 1);
+    setDisableAll(false);
+  }
 
   return (
     <GameContext.Provider
@@ -132,7 +150,6 @@ export const GameContextProvider = ({
         values: {
           currentRow,
           word,
-          participantName,
           points,
           round,
           answers,
@@ -143,7 +160,6 @@ export const GameContextProvider = ({
         functions: {
           setCurrentRow,
           setWord,
-          setParticipantName,
           setPoints,
           setRound,
           setAnswers,
@@ -154,6 +170,7 @@ export const GameContextProvider = ({
           onOpenModalSuccess: onOpen,
           onOpenChangeModalSuccess: onOpenChange,
           resetGame,
+          nextWord
         },
       }}
     >
