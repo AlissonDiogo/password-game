@@ -3,7 +3,7 @@
 import { createContext, useEffect, useState } from "react";
 import { useDisclosure } from "@nextui-org/modal";
 
-import { words } from '@/db'
+import { words } from "@/db";
 
 interface ContextValues {
   values: ValuesType;
@@ -54,12 +54,6 @@ export const GameContextProvider = ({
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  useEffect(() => {
-    if(currentAnswer){
-      console.log(currentAnswer)
-    }
-  }, [])
-
   const setSquareValue = (squareNumber: number, newValue: string) => {
     const currentAnswerCopy = currentAnswer;
     currentAnswerCopy[squareNumber] = newValue;
@@ -71,7 +65,7 @@ export const GameContextProvider = ({
       if (checkIfAnswerIsCorrect(currentAnswer)) {
         setDisableAll(true);
         onOpen();
-        setPoints(points + 100)
+        setPoints(points + 100);
       }
       const answersCopy = answers;
       answersCopy.push(currentAnswer.join(""));
@@ -82,7 +76,6 @@ export const GameContextProvider = ({
   };
 
   const checkIfAnswerIsCorrect = (currentAnswer: string[]) => {
-    console.log({currentAnswer, word});
     return currentAnswer.join("").toUpperCase() === word;
   };
 
@@ -123,8 +116,8 @@ export const GameContextProvider = ({
   };
 
   const resetGame = () => {
-    document.cookie = "user=; expires=Thu, 01 Jan 2000 00:00:00 UTC; path=/;";    
-    
+    document.cookie = "user=; expires=Thu, 01 Jan 2000 00:00:00 UTC; path=/;";
+
     setCurrentRow(0);
     setAnswers([]);
     setCurrentAnswer([]);
@@ -133,16 +126,15 @@ export const GameContextProvider = ({
     setRound(1);
   };
 
-  const nextWord = (): void =>  {
+  const nextWord = (): void => {
     const randomIndex = Math.floor(Math.random() * 184);
-    console.log(words[randomIndex])
-    setWord(words[randomIndex]);
+    setWord(words[randomIndex].toUpperCase());
     setAnswers([]);
     setCurrentAnswer([]);
     setCurrentRow(0);
-    setRound(prev => prev + 1);
+    setRound((prev) => prev + 1);
     setDisableAll(false);
-  }
+  };
 
   return (
     <GameContext.Provider
@@ -170,7 +162,7 @@ export const GameContextProvider = ({
           onOpenModalSuccess: onOpen,
           onOpenChangeModalSuccess: onOpenChange,
           resetGame,
-          nextWord
+          nextWord,
         },
       }}
     >
